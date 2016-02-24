@@ -1,0 +1,134 @@
+form {
+	.alert {
+        padding-right: 18px;
+
+        ul {
+            margin-left: 0px;
+        }
+
+        li {
+            list-style: none;
+            list-style-position: inside;
+        }
+    }
+
+    .checkbox input[type="checkbox"] {
+        margin-right: 4px;
+        margin-top: 2px;
+    }
+
+    legend {
+        margin-bottom: 0px;
+        font-size: 20px;
+        .font-logo;
+        border: 0px;
+        color: #317EAC;
+    }
+
+    .form-actions {
+        margin-bottom:0px;
+        padding-bottom: 0px;
+        padding-left: 0px;
+        padding-top: 20px;
+    }
+
+    .control-group {
+        label {
+            color: #000000;
+        }
+
+        input.textinput,
+        textarea,
+        select {
+            width: 354px;
+            background-color: #ffffff;
+        }
+
+        .help-inline {
+            vertical-align: 8px;
+        }
+
+        &.error {
+            label,
+            input, 
+            select, 
+            textarea,
+            .help-block {
+                color: #000000;
+            }
+        }
+    }
+    
+    .controls {
+        .help-block {
+            font-style: italic;
+        }
+    }
+
+    &.filter {
+        .control-group {
+            display: inline-block;
+            margin-bottom: 0px;
+            padding-left: 4px;
+            padding-right: 4px;
+
+            input {
+               width: 310px;
+            }
+
+            select {
+                width: 220px;
+            }
+        }
+
+        .form-actions {
+            margin-top: 20px;
+        }
+    }
+
+    input[type="file"] {
+        margin-top: 10px;
+    }
+
+    .file-drop {
+        margin-top: 20px;
+        margin-bottom: 0px
+    }
+
+    .file-drop-hover {
+        background-color: #7BB33D;
+        color: #ffffff;
+    }
+}
+
+.modal {
+    form {
+        margin-bottom: 0px;
+
+        .control-group {
+            input,
+            textarea {
+                width: 516px;
+            }
+
+            textarea {
+                height: 100px;
+            }
+        }
+    }
+}
+
+#profile {
+    form > fieldset {
+        height: 200px;
+    }
+}
+
+#process-resource {
+    margin-top: 10px;
+
+    form {
+        margin-top: 20px;
+        margin-bottom: 2px;
+    }
+}

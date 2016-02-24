@@ -1,0 +1,89 @@
+{% extends "base_app.html" %}
+{% load i18n compress pagination_tags %}
+
+{% block css %}
+    {% compress css %}
+        <link type="text/less" href="{{ STATIC_URL }}css/libs/shCoreEclipse.css" rel="stylesheet">
+    {% endcompress %}
+{% endblock %}
+
+{% block js %}
+    {% compress js %}
+        <script src="{{ STATIC_URL }}js/libs/XRegExp.js"></script>
+        <script src="{{ STATIC_URL }}js/libs/shCore.js"></script>
+        <script src="{{ STATIC_URL }}js/libs/shBrushJScript.js"></script>
+        <script src="{{ STATIC_URL }}js/events.js"></script>
+    {% endcompress %}
+{% endblock %}
+
+{% block js_inline %}
+	{% if event.source_position %}
+	    <script type="text/javascript">
+	        $(function(){
+	            highlight({{ event.source_position.0 }}); 
+	        });
+	    </script>
+    {% endif %}
+{% endblock %}
+
+{% block content %}
+    <ul class="breadcrumb">
+        <li class="pull-left"><a href="{% url app_events %}">{% trans "Errors" %}</a> <span class="divider">/</span></li>
+        <li class="pull-left active">{{ event.last_time|date }} {{ event.last_time|time }}</li>
+        <li class="pull-right">
+            {% if event.resource %}
+                <a href="{% url app_bundles_resources_detail event.resource.uuid %}" class="pull-right action" title="{% trans "Delete selected bundle?" %}">
+                    <i class="icon-tag"></i> {% trans "Linked resource" %}
+                </a>
+            {% endif %}
+            {% if not event.reviewed %}
+                <a href="{% url app_events_reviewed event.uuid %}" class="pull-right action dialog-confirm" title="{% trans "Mark selected error as reviewed?" %}">
+                    <i class="icon-check"></i> {% trans "Mark error as reviewed" %}
+                </a>
+            {% else %}
+                <span class="pull-right"><i class="icon-check "></i> {% trans "Is reviewed" %}</span>
+            {% endif %}
+         </li>
+    </ul>
+    <div class="list-item">
+        <div class="title pull-left">{% trans "Error message" %}</div>
+        <div class="content">{{ event.error_name }}: {{ event.error_message }}</div>
+    </div>
+    <div class="list-item">
+        <div class="title pull-left">{% trans "Error position" %}</div>
+        <div class="content">
+        	{% trans "line" %}: {{ event.client_position.0|default:"/" }},
+        	{% trans "column" %}: {{ event.client_position.1|default:"/" }}
+       	</div>
+    </div>
+    <div class="list-item">
+        <div class="title pull-left">{% trans "Website URL" %}</div>
+        <div class="content"><a href="{{ event.client_url }}" rel="external">{{ event.client_url|default:"/" }}</a></div>
+    </div>
+    <div class="list-item">
+        <div class="title pull-left">{% trans "User Agent" %}</div>
+        <div class="content">{{ event.client_user_agent|default:"/" }}</div>
+    </div>
+    <div class="list-item">
+        <div class="title pull-left">{% trans "Browser" %}</div>
+        <div class="content">
+            <i class="browser-{{ event.client_browser_name|lower }}"></i>{{ event.client_browser }} {{ event.client_browser_version }}
+        </div>
+    </div>
+    <div class="list-item">
+        <div class="title pull-left">{% trans "Platform" %}</div>
+        <div class="content">{{ event.client_platform|default:"/" }}</div>
+    </div>
+    <div class="list-item">
+        <div class="title pull-left">{% trans "Language" %}</div>
+        <div class="content">{{ event.client_language|default:"/" }}</div>
+    </div>
+    <div class="list-item last">
+        <div class="title pull-left">{% trans "Cookies?" %}</div>
+        <div class="content"><i class="icon-{% if event.client_cookie_enabled %}ok{% else %}ban{% endif %}-circle"></i></div>
+    </div>
+    {% if event.source_position %}
+        <pre class="brush: js;">{{ event.resource.source|escape }}</pre>
+        <br class="clearfix"/>
+    {% endif %}
+{% endblock %}

@@ -1,0 +1,154 @@
+@import "base.less";
+@import "form.less";
+@import "table.less";
+
+.navbar,
+.container {
+    min-width: 590px;
+}
+
+.navbar {
+	.brand {
+        .font-logo;
+    }
+}
+
+.navbar-fixed-top,
+.navbar-fixed-bottom {
+    z-index: 1010;
+}
+
+h1, h2, h3, h4, h5 {
+    font-family: 'Ubuntu', sans-serif;
+}
+
+.alert {
+    cursor: pointer;
+    cursor: hand;
+}
+
+.page-header {
+    padding-bottom: 26px;
+    margin-top: 10px;
+
+    h1, h2, h3, h4, h5 {
+        line-height: 14px;
+    }
+
+    a {
+        padding-left: 10px;
+        margin-right: 10px;
+    }
+
+    a.last {
+        margin-right: 0px;
+    }
+}
+
+.list-item {
+    padding: 2px;
+    padding-top: 10px;
+    padding-bottom: 10px;
+    border-bottom: 1px solid #ddd;
+
+    .title {
+        min-width: 120px;
+        padding-left: 4px;
+        font-weight: bold;
+    }
+
+    .content {
+        overflow: auto;
+    }
+    
+    &.last {
+        border-bottom: 0px;
+    }
+}
+
+.breadcrumb {
+	height: 18px;
+    margin-bottom: 10px;
+    margin-top: 4px;
+
+    a.action {
+        padding-left: 10px;
+    }
+}
+
+.syntaxhighlighter {
+    border: 1px solid #ddd;
+    margin-top: 10px;
+    max-height: 440px;
+
+    .code {
+        .container:before,
+        .container:after {
+            content: none;
+        }
+    }
+}
+
+.browser-chrome { .sprite-browser(-2px, 15px);  }
+.browser-firefox { .sprite-browser(-19px, 16px); }
+.browser-opera { .sprite-browser(-37px, 15px); }
+.browser-safari { .sprite-browser(-54px, 15px); }
+.browser-microsoft_internet_explorer { .sprite-browser(-70px, 16px); }
+
+.code {
+    padding: 10px;
+    margin-bottom: 10px;
+    background-color: whiteSmoke;
+    font-family: Consolas,Menlo,"Liberation Mono",Courier,monospace;
+    color: #BD4247;
+
+    .input {
+        color: #317EAC;
+    }
+}
+
+.key {
+    padding-right: 10px;
+}
+
+p.big {
+    margin-top: 16px;
+    margin-bottom: 16px;
+}
+
+#stats {
+    margin-top: 20px;
+
+    #chart {
+        height: 180px;
+        min-width: 100%;
+        text-align: center;
+
+        img.loader {
+            margin-top: 80px;
+        }
+    }
+
+    #traffic {
+        height: 140px;
+
+        .list-item {
+            .title {
+                min-width: 156px;
+            }
+        }
+    }
+}
+
+.alert {
+    ul {
+        margin-bottom: 0px;
+        margin-left: 16px;
+    }
+}
+
+.popover-content > p {
+    p {
+        margin-top: 10px;
+    }
+}

@@ -1,0 +1,49 @@
+{% extends "base_app.html" %}
+{% load i18n crispy_forms_tags jquery_validation %}
+
+{% block js_inline %}
+    <script type="text/javascript">
+        $(function() {
+            $('#sign-in').validate(
+                '{% url app_auth_sign_in_validate %}',
+                { callback: bootstrap_callback }
+            );
+        });
+    </script>
+{% endblock %}
+
+{% block navigation %}
+    <div class="navbar navbar-fixed-top">
+        <div class="navbar-inner">
+            <div class="container">
+                <a href="{% url site %}" class="brand"> {% trans "errorify" %}</a>
+                <ul class="nav">
+                    <li class="active"><a href="{% url app_auth_sign_in %}"><i class="icon-user icon-white"></i> {% trans "Sign in" %}</a></li>
+                    <li><a href="{% url app_auth_sign_up %}"><i class="icon-plus icon-white"></i> {% trans "Sign up" %}</a></li>
+                </ul>
+                <ul class="nav pull-right">
+                    <li><a href="{% url site %}"><i class="icon-home icon-white"></i> {% trans "Home page" %}</a></li>
+                </ul>
+            </div>
+        </div>
+    </div>
+{% endblock %}
+
+{% block content %}
+    <div class="span4">&nbsp;</div>
+    <form id="sign-in" method="post" class="well span4 box-shadow" action="{% url app_auth_sign_in %}?next={{ request.GET.next }}">
+        {% csrf_token %}
+        <fieldset>
+            <legend>{% trans "Sign in" %}</legend>
+            {{ form|crispy }}
+            <div class="form-actions">
+                <div class="pull-left">
+                    <button class="btn success" type="submit"><i class="icon-ok"></i> {% trans "Submit" %}</button>
+                </div>
+                <div class="pull-right forgot-password">
+                    <a href="{% url app_auth_reset %}">{% trans "Reset your password?" %}</a>
+                </div>
+            </div>
+        </fieldset>
+    </form>
+{% endblock %}

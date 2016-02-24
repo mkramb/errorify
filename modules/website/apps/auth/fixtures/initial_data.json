@@ -1,0 +1,13 @@
+[
+    {
+        "pk": 1, 
+        "model": "auth.package", 
+        "fields": {
+            "title": "Free",
+            "expire_days": "30",
+            "limit_bundles": "1",
+            "limit_events": "250",
+            "limit_api": "20"
+        }
+    }
+]

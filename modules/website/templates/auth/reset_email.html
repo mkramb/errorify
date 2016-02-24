@@ -1,0 +1,24 @@
+{% autoescape off %}
+{% load i18n %}
+<html>
+<head>
+    <meta http-equiv="content-type" content="text/html; charset=utf-8" />
+    <title>{% trans "Password reset" %}</title>
+</head>
+<body>
+    <p>
+        {% trans "You're receiving this e-mail because you requested a password reset for your user account at www.errorify.com." %}<br/>
+        {% trans "Please go to the following page and choose a new password:" %}
+    </p>
+    <a href="http://{{ domain }}{% url app_auth_reset_confirm uidb36=uid token=token %}">http://{{ domain }}{% url app_auth_reset_confirm uidb36=uid token=token %}</a>
+    <br />
+    <p>
+        {% trans "Your username, in case you've forgotten:" %} {{ user.username }}<br />
+        {% trans "Thanks for using our product!" %}
+    </p>
+    <p>
+        {% trans "Team" %} {{ site_name }}
+    </p>
+</body>
+</html>
+{% endautoescape %}

@@ -1,0 +1,21 @@
+{% extends "base_app.html" %}
+{% load i18n crispy_forms_tags jquery_validation %}
+
+{% block js_inline %}
+    <script type="text/javascript">
+        $(function() {
+            $('#user-password').validate('{% url app_auth_profile_password_validate %}', { callback: bootstrap_callback });
+            $('#user-data').validate('{% url app_auth_profile_data_validate %}', { callback: bootstrap_callback });
+        });
+    </script>
+{% endblock %}
+
+{% block content %}
+    <div class="page-header">
+        <h3 class="pull-left"> {% trans "User profile" %}</h3>
+    </div>
+    <div class="row" id="profile">
+        <div class="span6">{% crispy form_password %}</div>
+        <div class="span6">{% crispy form_profile %}</div>
+    </div>
+{% endblock %}

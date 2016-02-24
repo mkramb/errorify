@@ -1,0 +1,2 @@
+class BandwidthOverload(Exception):
+    pass

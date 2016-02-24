@@ -1,0 +1,59 @@
+{% extends "base_app.html" %}
+{% load i18n %}
+
+{% block content %}
+    <div class="page-header">
+        <h3 class="pull-left"> {% trans "Api information" %}</h3>
+    </div>
+    <p>
+        {% blocktrans %}
+            All features all available through programmable API, so you can easily integrate API calls into your build system. Interface is used by standard REST calls,
+            which ensures that it is completely technology agnostic. Samples are shown using standard <a href="http://curl.haxx.se/" rel="external">CURL command line</a>. 
+            Each user gets an API KEY, which identifies the user (please save it securely). You can always generate new KEY.
+        {% endblocktrans %}
+    </p>
+    <div class="well box-shadow" style="margin-top:20px">
+        <span class="key">{{ key }}</span>
+        <a class="btn btn-primary" href="{% url app_api_new_key %}">{% trans "Generate new KEY" %}</a>
+    </div>
+    <p class="big">
+        {% blocktrans %}
+            Bundles are collections of resources (javascript files), which are mapped to specific web domain (and title for description).
+            You can CREATE, DELETE and QUERY for bundles.
+        {% endblocktrans %}
+    </p>
+    <div class="well code box-shadow">
+        curl -X GET {{ PROJECT_URL }}/api/bundles?key=<span class="input">[key]</span><br/>
+        curl -X GET {{ PROJECT_URL }}/api/bundles?key=<span class="input">[key]</span>&bundle=<span class="input">[uuid]</span><br/>
+        curl -X DELETE {{ PROJECT_URL }}/api/bundles?key=<span class="input">[key]</span>&uuid=<span class="input">[uuid]</span><br/>
+        curl -X POST -d "title=<span class="input">[title]</span>&domain=<span class="input">[domain]</span>" {{ PROJECT_URL }}/api/bundles?key=<span class="input">[key]</span>
+    </div>
+    <p class="big">
+        {% blocktrans %}
+            Resources are your each individual javascript file. When you POST them through API, system automatically initialize processing (default settings are assumed).
+        {% endblocktrans %}
+    </p>
+    <div class="well code box-shadow">
+        curl -X GET {{ PROJECT_URL }}/api/resources?key=<span class="input">[key]</span><br/>
+        curl -X GET {{ PROJECT_URL }}/api/resources?key=<span class="input">[key]</span>&uuid=<span class="input">[uuid]</span><br/>
+        curl -X DELETE {{ PROJECT_URL }}/api/resources?key=<span class="input">[key]</span>&uuid=[uuid]<br/>
+        curl -X POST -F "source=@<span class="input">[application.js]</span>;type=application/javascript" {{ PROJECT_URL }}/api/resources?key=<span class="input">[key]</span>&bundle=<span class="input">[uuid]</span>
+    </div>
+    <p class="big">
+        {% blocktrans %}
+            Events API is used to QUERY for errors. Which can also be filtered by specific bundle or resource.
+        {% endblocktrans %}
+    </p>
+    <div class="well code box-shadow">
+        curl -X GET {{ PROJECT_URL }}/api/events?key=<span class="input">[key]</span><br/>
+        curl -X GET {{ PROJECT_URL }}/api/events?key=<span class="input">[key]</span>&bundle=<span class="input">[uuid]</span><br/>
+        curl -X GET {{ PROJECT_URL }}/api/events?key=<span class="input">[key]</span>&resource=<span class="input">[uuid]</span>
+    </div>
+    <p class="big">
+        {% blocktrans %}
+            All API calls return JSON as default serializer, but you can also use XML response. For example:
+        {% endblocktrans %}
+    </p>
+    <div class="well code box-shadow">curl -X GET {{ PROJECT_URL }}/api/bundles.<span class="input">xml</span>?key=<span class="input">[key]</span></div>
+    <br class="clearfix" />
+{% endblock %}

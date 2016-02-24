@@ -1,0 +1,26 @@
+{% extends "base_app.html" %}
+{% load i18n crispy_forms_tags jquery_validation %}
+
+{% block navigation %}
+    <div class="navbar navbar-fixed-top">
+        <div class="navbar-inner">
+            <div class="container">
+                <a href="{% url site %}" class="brand"> {% trans "errorify" %}</a>
+                <ul class="nav">
+                    <li class="active"><a href="{% url app_auth_sign_in %}"><i class="icon-user icon-white"></i> {% trans "Sign in" %}</a></li>
+                    <li><a href="{% url app_auth_sign_up %}"><i class="icon-plus icon-white"></i> {% trans "Sign up" %}</a></li>
+                </ul>
+                <ul class="nav pull-right">
+                    <li><a href="{% url site %}"><i class="icon-home icon-white"></i> {% trans "Home page" %}</a></li>
+                </ul>
+            </div>
+        </div>
+    </div>
+{% endblock %}
+
+{% block content %}
+    <div class="span4">&nbsp;</div>
+    <form id="password-reset" method="post" class="well box-shadow span4" action="{{ request.get_full_path }}">
+        {% crispy form %}
+    </form>
+{% endblock %}

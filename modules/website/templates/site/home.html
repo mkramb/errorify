@@ -1,0 +1,79 @@
+{% extends "base_site.html" %}
+{% load i18n %}
+
+{% block content %}
+    <div class="hero-unit">
+        <h2>{% trans "Want to catch JavaScript errors before your users?" %}</h2>
+        <div class="intro">
+            <p class="pull-left">
+                {% blocktrans %}
+                    Give your users a bug-free experience, by tracking all client-side errors and quickly react upon them.
+                    Enable error reporting by single click, without making sure to catch all errors, it also works on mobile.
+                    Please see <a href="/features">description of the functionality</a> and watch <a href="#" class="modal-show" data-modal="modal-screencast">product in action</a>. 
+                {% endblocktrans %}
+            </p>
+        </div>
+        <div class="home-buttons">
+            <div class="pull-left" id="initial">
+                <p>
+                  <a href="{% url site_pricing %}" class="btn btn-primary btn-large">{% trans "Sign up for FREE" %} &raquo;</a>
+                  <a href="#" id="video-button" class="btn btn-large modal-show" data-modal="modal-screencast">{% trans "Video demostration" %}</a>
+                </p>
+            </div>
+            <div class="pull-right" id="share-buttons">
+                <div class="fb-like" data-href="http://www.errorify.com" data-send="false" data-layout="box_count" data-width="70" data-show-faces="false" data-font="segoe ui"></div>
+                <div class="google-plus"><g:plusone size="tall" href="http://www.errorify.com"></g:plusone></div>
+                <div class="twitter">
+                    <a href="https://twitter.com/share" class="twitter-share-button" data-url="http://www.errorify.com" data-count="vertical">Tweet</a>
+                    <script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0];if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src="//platform.twitter.com/widgets.js";fjs.parentNode.insertBefore(js,fjs);}}(document,"script","twitter-wjs");</script>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="span4">
+           <p>
+                {% blocktrans %}
+                    <span class="label">Upload</span> javascript to compile it and optionaly add error reporting, or just enhance existing calls. 
+                    Serve compiled versions and automate the process using our APIs and never relay on third-party proxy services. Start a bug-free experience.
+                {% endblocktrans %}
+          </p>
+        </div>
+        <div class="span4">
+           <p>
+                {% blocktrans %}
+                    <span class="label">Tracking</span> of errors was never before more simplified process, just sit back and relax.
+                    System will notify you about new errors. All errors are automaticly aggregated by client variables, and available on graphing views.
+                {% endblocktrans %}
+           </p>
+        </div>
+        <div class="span4">
+          <p>
+                {% blocktrans %}
+                    <span class="label">Verifying</span> is all done using simple to use dashboard. You get all needed information, all available client information,
+                    and source mapping to original files, to easily confirm errors. So you can quickly troubleshoot errors and act open them.
+                {% endblocktrans %}
+          </p>
+        </div>
+    </div>
+    <hr/>
+    <div id="showcase">
+        <a href="http://www.doublerecall.com" rel="external"><img src="{{ STATIC_URL }}img/logo_doublerecall.png" alt="DoubleRecall"/></a>
+        <a href="http://www.osmosisnow.com" rel="external"><img src="{{ STATIC_URL }}img/logo_osmosis.png" alt="Osmosis"/></a>
+        <a href="http://www.zaposlim.se" rel="external"><img src="{{ STATIC_URL }}img/logo_zaposlimse.png" alt="Zaposlim.se"/></a>
+    </div>
+    <div class="modal hide" id="modal-screencast">  
+        <div class="modal-body">
+            <object style="height="360px; width="640px">
+                <param name="movie" value="https://www.youtube.com/v/-lRnaSnLg3U?version=3&feature=player_embedded">
+                <param name="allowFullScreen" value="true">
+                <param name="allowScriptAccess" value="always">
+                <param name="wmode" value="transparent">
+                <embed src="https://www.youtube.com/v/-lRnaSnLg3U?version=3&feature=player_embedded" type="application/x-shockwave-flash" allowfullscreen="true" allowScriptAccess="always" width="640" height="360">
+            </object>
+        </div>
+        <div class="modal-footer">
+            <a href="#" class="btn modal-hide">{% trans "Close" %}</a>
+        </div>
+    </div>
+{% endblock %}

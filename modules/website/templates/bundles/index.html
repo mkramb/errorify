@@ -1,0 +1,81 @@
+{% extends "base_app.html" %}
+{% load i18n compress pagination_tags crispy_forms_tags sorting_tags %}
+
+{% block js %}
+    {% compress js %}
+        <script src="{{ STATIC_URL }}js/bundles.js"></script>
+    {% endcompress %}
+{% endblock %}
+
+{% block js_inline %}
+    <script type="text/javascript">
+        $(function() {
+            $('#bundle').validate(
+                '{% url app_bundles_save_validate %}',
+                { callback: bootstrap_callback }
+            );
+        });
+    </script>
+{% endblock %}
+
+{% block content %}
+    <div class="page-header">
+        <h3 class="pull-left"> {% trans "Available bundles" %}</h3>
+        <a href="#" class="pull-right badge last toggle-filter action">{% trans "Filter selection" %}</a>
+        <a href="#" class="pull-right badge action modal-show" data-modal="modal-create-bundle">{% trans "Create bundle" %}</a>
+    </div>
+    <form id="errors-filter" method="get" class="well form-inline form-inline filter box-shadow {% if not filter_has_data %}hide{% endif %}">
+        <fieldset>
+            {{ filter|crispy }}
+            <div class="form-actions">
+                <button class="btn success" type="submit"><i class="icon-ok"></i> {% trans "Apply" %}</button>
+                <button class="btn success" type="button" onclick="window.location='{% url app_bundles %}';"><i class="icon-repeat"></i> {% trans "Revert" %}</button>
+            </div>
+        </fieldset>
+    </form>
+    {% autosort bundles "title" "desc" %}
+    {% autopaginate bundles %}
+    <table class="table table-bordered table-striped">
+        <thead>
+            <tr>
+                <td>{% anchor "title" _("Title") %}</td>
+                <td>{% anchor "domain" _("Domain") %}</td>
+                <td>&nbsp;</td>
+            </tr>
+        </thead>
+        <tbody>
+            {% for bundle in bundles %}
+                <tr>
+                    <td>{{ bundle.title }}</td>
+                    <td>{{ bundle.domain|default:"/" }}</td>
+                    <td class="actions" style="width: 160px">
+                        <a href="{% url app_bundles_delete bundle.uuid %}" class="dialog-confirm" title="{% trans "Delete selected bundle and all connected resources?" %}">
+                            <i class="icon-remove-circle"></i> delete
+                        </a>
+                        <a href="{% url app_bundles_detail bundle.uuid %}" title="{% trans "Open" %}">
+                            <i class="icon-share"></i> open
+                        </a>
+                    </td>
+                </tr>
+            {% empty %}
+                <tr><td colspan="3">{% trans "Currently you have no created bundles." %}</td></tr>
+            {% endfor %}
+        </tbody>
+    </table>
+    <div class="pull-right">
+        {% paginate %}
+    </div>
+    <div class="modal hide" id="modal-create-bundle">
+        <div class="modal-header">
+            <button class="close modal-hide" data-dismiss="modal">×</button>
+            <h3>{% trans "Create bundle" %}</h3>
+        </div>
+        <div class="modal-body">
+            {% crispy form %}
+        </div>
+        <div class="modal-footer">
+            <a href="#" class="btn btn-primary modal-submit">{% trans "Submit" %}</a>
+            <a href="#" class="btn modal-hide">{% trans "Close" %}</a>
+        </div>
+    </div>
+{% endblock %}

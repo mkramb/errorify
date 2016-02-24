@@ -1,0 +1,116 @@
+{% load i18n compress crispy_forms_tags %}
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+
+    <meta charset="utf-8">
+    <title>{% block title %}errorify{% endblock %}</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="errorify.com - {% trans "verify your errors" %}">
+    <meta name="author" content="mitja@vizius.si">
+
+    <!--[if lt IE 9]>
+      <script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+
+    <style>
+      body {
+        padding-top: 60px;
+      }
+    </style>
+
+    <link rel="shortcut icon" href="{{ STATIC_URL }}img/favicon.ico">
+    <link href='http://fonts.googleapis.com/css?family=Ubuntu+Condensed|Ubuntu' rel='stylesheet' type='text/css'>
+
+    {% block css_base %}{% endblock %}
+    {% block css %}{% endblock %}
+    {% block head %}{% endblock %}
+
+  </head>
+  <body>
+
+    {% block js_load %}{% endblock %}
+    {% block navigation %}{% endblock %}
+
+    <div class="container">
+        <div class="messages">{% block messages %}{% endblock %}</div>
+        {% block content %}{% endblock %}
+        {% block footer %}{% endblock %}
+    </div>
+
+    <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js"></script>
+    <script>!window.jQuery && document.write(unescape('%3Cscript src="{{ STATIC_URL }}js/libs/jquery-1.7.2.min.js"%3E%3C/script%3E'))</script>
+    <script src="{% url django.views.i18n.javascript_catalog %}"></script>
+
+    {% block js_external %}{% endblock %}
+
+    {% block js_init %}
+        {% compress js %}
+            <script src="{{ STATIC_URL }}bootstrap/js/bootstrap.js"></script>
+            <script src="{{ STATIC_URL }}js/libs/jquery.ajax.validation.js"></script>
+            <script src="{{ STATIC_URL }}js/libs/jquery.ajax.validation.bootstrap.js"></script>
+            <script src="{{ STATIC_URL }}js/libs/jquery.debouncedresize.js"></script>
+            <script src="{{ STATIC_URL }}js/libs/jquery.cookie.js"></script>
+            <script src="{{ STATIC_URL }}js/libs/jquery.color.js"></script>
+            <script src="{{ STATIC_URL }}js/libs/bootbox.js"></script>
+            <script src="{{ STATIC_URL }}js/plugins.js"></script>
+            <script src="{{ STATIC_URL }}js/base.js"></script>
+        {% endcompress %}
+    {% endblock %}
+
+    {% block js_base %}{% endblock %}
+    {% block js %}{% endblock %}
+    {% block js_feedback %}
+        <script type="text/javascript">
+            $(function() {
+                var feedback = $('#feedback');
+                feedback.validate(
+                    '{% url site_feedback_validate %}', {
+                        callback: bootstrap_callback, 
+                        submitHandler: $.proxy(function() { 
+                            $.ajax({
+                                url : feedback.attr('action'),
+                                data : feedback.serialize(),
+                                cache : false,
+                                type : 'POST',
+                                success : function(data) {
+                                    $('#modal-feedback button.modal-hide').trigger('click');
+                                }
+                            });
+                        } , this)
+                    }
+                );
+                feedback.submit(function(e) {
+                    e.preventDefault();
+                    return false;
+                });
+            });
+        </script>
+    {% endblock %}
+
+    {% block js_inline %}{% endblock %}
+    {% block sidebar %}
+        <div id="sidebar">
+            <div class="vertical hide">
+                <i class="icon-bullhorn"></i><a href="#" class="modal-show" data-modal="modal-feedback"> {% trans "any feedback?" %}</a>
+            </div>
+            <div class="modal hide" id="modal-feedback">
+                <div class="modal-header">
+                    <button class="close modal-hide" data-dismiss="modal">×</button>
+                    <h3>{% trans "Support form" %}</h3>
+                </div>
+                <div class="modal-body">
+                    {% crispy FEEDBACK_FORM %}
+                </div>
+                <div class="modal-footer">
+                    <a href="#" class="btn btn-primary modal-submit">{% trans "Submit" %}</a>
+                    <a href="#" class="btn modal-hide">{% trans "Close" %}</a>
+                </div>
+            </div>
+        </div>
+    {% endblock %}
+
+    <div id="overlay"></div>
+
+  </body>
+</html>

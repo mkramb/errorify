@@ -1,0 +1,64 @@
+{% extends "base_site.html" %}
+{% load i18n %}
+
+{% block title %}errorify &rsaquo; {% trans "pricing" %}{% endblock %}
+
+{% block content %}
+    <div class="row">
+        <div class="span12 info-unit">
+            <p>
+                {% blocktrans %}
+                    Currently we are in BETA stage, which means that only free package is available. We're testing our environment so that we can provide the best
+                    user experience. Other packages will be enabled as soon as possible, we really want to hear from you so please 
+                    <a href="mailto:info@errorify.com?subject=errorify.com">contact us</a> with whatever observations, critics or questions. 
+                {% endblocktrans %}
+            </p>
+        </div>
+    </div>
+    <br/>
+    <div class="row">
+        <div class="span12">
+            <table class="table table-striped pricing">
+                <thead>
+                    <tr>
+                        <td width="230"><h2>Free</h2></td>
+                        <td width="230"><h2>Medium</h2></td>
+                        <td width="230" class="last"><h2>Pro</h2></td>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>{% trans "for 30 days" %}</td>
+                        <td><sup>$</sup><span class="price">10</span><sub>/ mo</sub></td>
+                        <td class="last"><sup>$</sup><span class="price">30</span><sub>/ mo</sub></td>
+                    </tr>
+                    <tr>
+                        <td><b>1</b> {% trans "Domains" %}</td>
+                        <td><b>5</b> {% trans "Domains" %}</td>
+                        <td class="last"><b>20</b> {% trans "Domains" %}</td>
+                    </tr>
+                    <tr>
+                        <td><b>100</b> {% blocktrans %}events / day{% endblocktrans %}</td>
+                        <td><b>4.000</b> {% blocktrans %}events / day{% endblocktrans %}</td>
+                        <td class="last"><b>20.000</b> {% blocktrans %}events / day{% endblocktrans %}</td>
+                    </tr>
+                    <tr>
+                        <td><b>250</b> {% blocktrans %}api calls / week{% endblocktrans %}</td>
+                        <td><b>1.000</b> {% blocktrans %}api calls / week{% endblocktrans %}</td>
+                        <td class="last"><b>2.500</b> {% blocktrans %}api calls / week{% endblocktrans %}</td>
+                    </tr>
+                    <tr>
+                        <td>—</td>
+                        <td>{% blocktrans %}<b>e-mail</b> notifications{% endblocktrans %}</td>
+                        <td class="last">{% blocktrans %}<b>e-mail</b> notification{% endblocktrans %}</td>
+                    </tr>
+                    <tr class="last">
+                        <td><a class="btn primary large" href="{% url app_auth_sign_up %}">{% trans "Select plan" %}</a></td>
+                        <td><a class="btn primary large disabled" href="#">{% trans "Select plan" %}</a></td>
+                        <td class="last"><a class="btn primary large disabled" href="#">{% trans "Select plan" %}</a></td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+{% endblock %}

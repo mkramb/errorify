@@ -1,0 +1,81 @@
+{% extends "base_site.html" %}
+{% load i18n %}
+
+{% block title %}errorify &rsaquo; {% trans "features" %}{% endblock %}
+
+{% block content %}
+    <div class="row">
+        <div class="span12 info-unit">
+            <p>
+                {% blocktrans %}
+                    If you think you can always avoid errors in your JavaScript, your're WRONG. It's almost impossible to test for every client environment (browser, os, versions).
+                    Using errorify you can monitor for post-deployment bugs, target a large set of browsers and find bugs that you didn't even know about. Our product performs
+                    static analysis on your code-base to add (optionally) error reporting at build time. All functionality is available in simple to use dashboard. Read below about 
+                    most important features, but not all.
+                {% endblocktrans %}
+            </p>
+        </div>
+    </div>
+    <br/>
+    <div class="row">
+        <div class="span12">
+            <ul class="thumbnails">
+                <li class="span3">
+                    <div class="thumbnail">
+                        <img src="{{ STATIC_URL }}img/features_automatic.png" alt=""/>
+                        <div class="caption">
+                            <span class="label">{% trans "Automatic error reporting" %}</span>
+                            <p>
+                                {% blocktrans %}
+                                    Your code does not have any error reporting implemented? Relax, we can add it automatically
+                                    and you can integrate it using API calls. 
+                                {% endblocktrans %}
+                            </p>
+                        </div>
+                    </div>
+                </li>
+                <li class="span3">
+                    <div class="thumbnail">
+                        <img src="{{ STATIC_URL }}img/features_mapping.png" alt=""/>
+                        <div class="caption">
+                            <span class="label">{% trans "Source mapping" %}</span>
+                            <p>
+                                {% blocktrans %}
+                                    We can easily map positon in minified files to your original assets. So you can get
+                                    exact and usefull error location and react quickly. 
+                                {% endblocktrans %}
+                            </p>
+                        </div>
+                    </div>
+                </li>
+                <li class="span3">
+                    <div class="thumbnail">
+                        <img src="{{ STATIC_URL }}img/features_api.png" alt=""/>
+                        <div class="caption">
+                            <span class="label">{% trans "API integration" %}</span>
+                            <p>
+                                {% blocktrans %}
+                                    All features all available through programmable API, so you can easily integrate API calls into your build system.
+                                {% endblocktrans %}
+                            </p>
+                        </div>
+                    </div>
+                </li>
+                <li class="span3">
+                    <div class="thumbnail">
+                        <img src="{{ STATIC_URL }}img/features_dashboard.png" alt=""/>
+                        <div class="caption">
+                            <span class="label">{% trans "Dashboard" %}</span>
+                            <p>
+                                {% blocktrans %}
+                                    You can see all important informations in on single view, so you can react quickly.
+                                    Errors are also agreggated to graphing view.
+                                {% endblocktrans %}
+                            </p>
+                        </div>
+                    </div>
+                </li>
+            </ul>
+        </div>
+    </div>
+{% endblock %}

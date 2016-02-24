@@ -1,0 +1,41 @@
+{% extends "base_app.html" %}
+{% load i18n %}
+
+{% block content %}
+    <div class="page-header">
+        <h3 class="pull-left"> {% trans "Site integration" %}</h3>
+    </div>
+    <p class="big">
+        {% blocktrans %}
+            Copy-paste the following snippet into your pages so that it is located before any other script tag. Ideally, you'll want to put this close to the very top in your &lt;head&gt; tag,
+            script which is loaded asynchronous is 1.7 KB in size and will not effect your page load. Snippet also contains your api key.
+        {% endblocktrans %}
+    </p>
+    <div class="well code box-shadow">
+        &lt;script type="text/javascript"&gt;<br/>
+		&nbsp;&nbsp;&nbsp;&nbsp;(function (win, doc, key) {<br/>
+		&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;win.errorify = { data:[key], log: function(){ this.data.push(arguments) } }, win.onerror = function () { win.errorify.data.push(arguments); };<br/>
+    	&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;var a = doc.createElement("script"); a.type = "text/javascript"; a.src="{{ PROJECT_URL }}/core.js"; a.async = !0;<br/> 
+    	&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;var b = doc.getElementsByTagName("script")[0]; b.parentNode.insertBefore(a, b);<br/> 
+		&nbsp;&nbsp;&nbsp;&nbsp;})(window, document, "<strong>{{ key.rstrip }}</strong>");<br/>
+        &lt;/script&gt;
+    </div>
+    <p class="big">
+        {% blocktrans %}
+            You can define global error callback (put it after snippet), which is call when error occurs. See example below.
+        {% endblocktrans %}
+    </p>
+    <div class="well code box-shadow">
+        errorify.callback = function() {<br/>
+        &nbsp;&nbsp;&nbsp;&nbsp;alert("do something about error");<br/>
+        });
+    </div>
+    <p class="big">
+        {% blocktrans %}
+            You can write log statements by hand (which are enhanced at processing) or add try/catch/log block automatically.
+        {% endblocktrans %}
+    </p>
+    <div class="well code box-shadow">
+        errorify.log(e);
+    </div>
+{% endblock %}

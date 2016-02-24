@@ -1,0 +1,123 @@
+{% extends "base_app.html" %}
+{% load i18n compress pagination_tags sorting_tags %}
+
+{% block js %}
+    {% compress js %}
+        <script src="{{ STATIC_URL }}js/libs/formdata.js"></script>
+        <script src="{{ STATIC_URL }}js/libs/jquery.drag.drop.js"></script>
+        <script src="{{ STATIC_URL }}js/bundles.js"></script>
+    {% endcompress %}
+{% endblock %}
+
+{% block js_inline %}
+    <script type="text/javascript">
+        $(function() {
+            window.uploaded_files = [];
+            window.uploading = false;
+
+            $('#upload input[type="file"]').dropUpload({
+                'uploadUrl': '{% url app_bundles_resources_save bundle.uuid %}',
+                'dropClass': 'well file-drop',
+                'dropHoverClass': 'file-drop-hover',
+                'defaultText': '{% trans "Or drop your files here." %}',
+                'hoverText': '{% trans "Let go, to upload." %}',
+                'onUploaded': function(data) {
+                    window.uploading = false;
+
+                    if (data.length) {
+                        window.uploaded_files.push(data);
+                    }
+                    
+                    $('#modal-upload-resources .modal-body').highlight({
+                        start_color: data.length ? '#CDB' : '#E8D1DF'
+                    });
+                },
+                'onStartSending': function() {
+                    window.uploading = true;
+                    startUploadCheck();
+                }
+            });
+        });
+    </script>
+{% endblock %}
+
+{% block content %}
+    <ul class="breadcrumb">
+        <li class="pull-left active">{{ bundle.title }}</li>
+        <li class="pull-right">
+            <a href="{% url app_bundles_delete bundle.uuid %}" class="pull-right dialog-confirm action" title="{% trans "Delete selected bundle and all connected resources?" %}">
+                <i class="icon-remove"></i> {% trans "Delete bundle" %}
+            </a>
+            <a href="#" class="pull-right action modal-show" data-modal="modal-upload-resources">
+                <i class="icon-plus"></i> {% trans "Upload resource" %}
+            </a>
+         </li>
+    </ul>
+    <div class="list-item last">
+        <div class="title pull-left">{% trans "Domain" %}</div>
+        <div class="content pull-left"><a href="{{ bundle.domain }}" rel="external">{{ bundle.domain }}</a></div>
+        <br class="clearfix"/>
+    </div>
+    <div class="page-header">
+        <h3 class="pull-left"> {% trans "Bundle resources" %}</h3>
+    </div>
+    {% autopaginate resources %}
+    <table class="table table-bordered table-striped">
+        <thead>
+            <tr>
+                <td>{% trans "UUID" %}</td>
+                <td>{% trans "Source size" %}</td>
+                <td>{% trans "Minified size" %}</td>
+                <td>{% trans "Is processed?" %}</td>
+                <td>&nbsp;</td>
+            </tr>
+        </thead>
+        <tbody>
+            {% for resource in resources %}
+                <tr>
+                    <td>{{ resource.uuid }}</td>
+                    <td>{{ resource.source_size }}</td>
+                    <td>{{ resource.source_processed_size }}</td>
+                    <td class="center"><i class="icon-{% if resource.is_processed %}ok{% else %}remove{% endif %}"></i></td>
+                    <td class="actions" style="width: 160px">
+                        <a href="{% url app_bundles_resources_delete resource.uuid %}" class="dialog-confirm" title="{% trans "Delete selected resource?" %}">
+                            <i class="icon-remove-circle"></i> delete
+                        </a>
+                        <a href="{% url app_bundles_resources_detail resource.uuid %}" title="{% trans "Open" %}">
+                            <i class="icon-share"></i> open
+                        </a>
+                    </td>
+                </tr>
+            {% empty %}
+                <tr><td colspan="5">{% trans 'Upload new resource, by clicking "Upload resource".' %}</td></tr>
+            {% endfor %}
+        </tbody>
+    </table>
+    <div class="pull-right">
+        {% paginate %}
+    </div>
+    <div class="modal hide" id="modal-upload-resources">
+        <div class="modal-header">
+            <button class="close modal-hide-upload" data-dismiss="modal">×</button>
+            <h3>{% trans "Upload resources" %}</h3>
+        </div>
+        <div class="modal-body">
+            <div class="message" style="display:none">
+                <div class="progress progress-striped active">
+                    <div class="bar"style="width: 100%;">{% trans "uploading files" %}</div>
+                </div>
+            </div>
+            <form id="upload" action="{% url app_bundles_resources_save bundle.uuid %}" method="post" enctype="multipart/form-data">
+                {% csrf_token %}
+                <div class="clearfix control-group">
+                    <label for="files" class="control-label requiredField">Choose files:</label>
+                    <div class="controls"><input type="file" id="files" name="files[]" multiple="multiple"></div>
+                </div>
+            </form>
+        </div>
+        <div class="modal-footer">
+            <a href="#" class="btn btn-primary modal-submit hide"">{% trans "Submit" %}</a>
+            <a href="#" class="btn modal-hide-upload">{% trans "Close" %}</a>
+        </div>
+    </div>
+{% endblock %}

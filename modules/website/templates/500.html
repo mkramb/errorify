@@ -1,0 +1,29 @@
+{% extends "base_site.html" %}
+{% load i18n %}
+
+{% block title %}errorify &rsaquo; {% trans "500: Internal server error" %}{% endblock %}
+
+{% block navigation %}
+    <div class="navbar navbar-fixed-top">
+        <div class="navbar-inner">
+            <div class="container"></div>
+        </div>
+    </div>
+{% endblock %}
+
+{% block content %}
+    <div class="hero-unit" style="margin-top:200px">
+        <h2>{% trans "500: Internal server error" %}</h2>
+        <p>
+            {% blocktrans %}
+                The Web server encountered an unexpected condition that prevented it from fulfilling
+                the request by the client for access to the requested URL. Administrator has been notified.
+            {% endblocktrans %}
+        </p>
+    </div>
+{% endblock %}
+
+{% block js_load %}{% endblock %}
+{% block js_init %}{% endblock %}
+{% block js_feedback %}{% endblock %}
+{% block sidebar %}{% endblock %}

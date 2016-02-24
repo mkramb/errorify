@@ -1,0 +1,173 @@
+{% extends "base_app.html" %}
+{% load i18n compress pagination_tags crispy_forms_tags sorting_tags %}
+
+{% block js %}
+    {% compress js %}
+        <script src="{{ STATIC_URL }}js/bundles.js"></script>
+    {% endcompress %}
+{% endblock %}
+
+{% block js_inline %}
+    {% if resource.status == STATUS_RUNNING %}
+        <script type="text/javascript">
+            $(function() {
+                setInterval(function() {
+                    $.get('{% url app_bundles_resources_process_check resource.uuid %}', function(response) {
+                        if (response) {
+                            window.location.reload();
+                        }
+                    });
+                }, 4000);
+            });
+        </script>
+    {% endif %}
+{% endblock %}
+
+{% block messages %}
+    {% if resource.status == STATUS_FAILED %}
+        <div class="alert alert-error dont-hide">
+            <strong>Failed</strong> processing your javascript. Please read any info about errors or warnings and fix your resource.
+        </div>
+    {% else %}
+        {% for message in messages %}
+            <div class="alert {% if message.tags %}alert-{{ message.tags }}{% endif %}">
+              <button class="close" data-dismiss="alert">×</button>
+              {{ message }}
+            </div>
+        {% endfor %}
+    {% endif %}
+{% endblock %}
+
+{% block content %}
+    <ul class="breadcrumb">
+        <li class="pull-left"><a href="{% url app_bundles_detail resource.bundle.uuid %}">{% trans "Resources" %}</a> <span class="divider">/</span></li>
+        <li class="pull-left active">{{ resource.uuid }}</li>
+        <li class="pull-right">
+            <a href="{% url app_bundles_resources_delete resource.uuid %}" class="pull-right dialog-confirm action" title="{% trans "Delete selected resource?" %}">
+                <i class="icon-remove"></i> {% trans "Delete resource" %}
+            </a>
+            {% if events %}
+                <a href="{% url app_resource_events_delete resource.uuid %}" class="pull-right dialog-confirm action" title="{% trans "Clear all events for selected resource?" %}">
+                    <i class="icon-refresh"></i> {% trans "Clear all events" %}
+                </a>
+            {% endif %}
+         </li>
+    </ul>
+    {% if resource.status != STATUS_RUNNING %}
+        <div class="list-item">
+            <div class="title pull-left">{% trans "UUID" %}</div>
+            <div class="content pull-left">{{ resource.uuid }}</div>
+            <br class="clearfix"/>
+        </div>
+        <div class="list-item {% if resource.status != STATUS_PROCESSED %}last{% endif %}">
+            <div class="title pull-left">{% trans "Source" %}</div>
+            <div class="content pull-left">
+                <a href="{% url app_bundles_resources_source resource.uuid %}" rel="external" draggable="true"
+                    data-downloadurl="application/javascript:{{ resource.uuid }}.js:{{ PROJECT_URL }}{% url app_bundles_resources_source resource.uuid %}">
+                    <i class="icon-circle-arrow-down"></i> {{ resource.uuid }}.js</a> {{ resource.source_size }}
+            </div>
+            <br class="clearfix"/>
+        </div>
+        {% if resource.compiler_warnings %}
+            <div class="alert alert-info dont-hide">
+                <ul>
+                    {% for warning in resource.compiler_warnings %}
+                        <li>{{ warning }}</li>
+                    {% endfor %}
+                </ul>
+            </div>
+        {% endif %}
+        {% if resource.compiler_errors %}
+            <div class="alert alert-error dont-hide">
+                <ul>
+                    {% for error in resource.compiler_errors %}
+                        <li>{{ error }}</li>
+                    {% endfor %}
+                </ul>
+            </div>
+        {% endif %}
+    {% else %}
+        <p>{% trans "Proccesing your javascript, please wait or check later." %}</p>
+        <div class="progress progress-striped active">
+            <div class="bar"style="width: 100%;">{% trans "processing" %}</div>
+        </div>
+    {% endif %}
+    {% if resource.status == STATUS_INIT  %}
+        <div class="well box-shadow" id="process-resource">
+            {% trans "By default we will enhance your log statements with \"resourceId\" (which identifiers the javascript file) and append code positions." %}
+            {% crispy form %}
+        </div>
+    {% elif resource.status == STATUS_PROCESSED %}
+        <div class="list-item last">
+            <div class="title pull-left">{% trans "Processed" %}</div>
+            <div class="content pull-left">
+                <a href="{% url app_bundles_resources_source_processed resource.uuid %}" rel="external" draggable="true"
+                    data-downloadurl="application/javascript:{{ resource.uuid }}.processed.js:{{ PROJECT_URL }}{% url app_bundles_resources_source_processed resource.uuid %}">
+                    <i class="icon-circle-arrow-down"></i> {{ resource.uuid }}.processed.js</a> {{ resource.source_processed_size }}
+            </div>
+            <br class="clearfix"/>
+        </div>
+        <br class="clearfix"/>
+        <div class="page-header">
+            <h3 class="pull-left"> {% trans "Resource errors" %}</h3>
+            <a href="#" class="pull-right badge last toggle-filter action">{% trans "Filter selection" %}</a>
+        </div>
+        <form id="errors-filter" method="get" class="well form-inline form-inline filter box-shadow {% if not events_filter_has_data %}hide{% endif %}">
+            <fieldset>
+                {{ events_filter|crispy }}
+                <div class="form-actions">
+                    <button class="btn success" type="submit"><i class="icon-ok"></i> {% trans "Apply" %}</button>
+                    <button class="btn success" type="button" onclick="window.location='{% url app_bundles_resources_detail resource.uuid %}';"><i class="icon-repeat"></i> {% trans "Revert" %}</button>
+                </div>
+            </fieldset>
+        </form>
+        {% autosort events "last_time" "desc" %}
+        {% autopaginate events %}
+        <table class="table table-bordered table-striped">
+            <thead>
+                <tr>
+                    <td>{% anchor "last_time" _("Last time") %}</td>
+                    <td>{% anchor "first_time" _("First time") %}</td>
+                    <td>{% anchor "count" _("Count") %}</td>
+                    <td>{% anchor "error_name" _("Error") %}</td>
+                    <td>{% anchor "error_message" _("Website URL") %}</td>
+                    <td>{% anchor "client_browser" _("Browser") %}</td>
+                    <td>{% anchor "client_platform" _("Platform") %}</td>
+                    <td>{% anchor "reviewed" _("Is reviewed?") %}</td>
+                    <td>&nbsp;</td>
+                </tr>
+            </thead>
+            <tbody>
+                {% for event in events %}
+                    <tr>
+                        <td>{{ event.last_time|date }} {{ event.last_time|time }}</td>
+                        <td>{{ event.first_time|date }} {{ event.first_time|time }}</td>
+                        <td class="center">{{ event.count }}</td>
+                        <td>{{ event.error_name }}: {{ event.error_message|truncatechars:40 }}</td>
+                        <td>{{ event.client_url|truncatechars:30 }}</td>
+                        <td class="center" title="{{ event.client_browser }} {{ event.client_browser_version }}">
+                            {% if event.client_browser_name %}
+                                <i class="browser-{{ event.client_browser_name|lower }}"></i>
+                                {{ event.client_browser_version|truncatechars:8 }}
+                            {% else %}
+                                {{ event.client_browser }} {{ event.client_browser_version }}
+                            {% endif %}
+                        </td>
+                        <td class="center">{{ event.client_platform|default:"/" }}</td>
+                        <td class="center"><i class="icon-{% if event.reviewed %}ok{% else %}remove{% endif %}"></i></td>
+                        <td class="actions">
+                            <a href="{% url app_events_detail event.uuid %}" title="{% trans "More info" %}">
+                                <i class="icon-share"></i> open
+                            </a>
+                        </td>
+                    </tr>
+                {% empty %}
+                    <tr><td colspan="9">{% trans "Excellent, currently there are no errors available." %}</td></tr>
+                {% endfor %}
+            </tbody>
+        </table>
+        <div class="pull-right">
+            {% paginate %}
+        </div>
+    {% endif %}
+{% endblock %}

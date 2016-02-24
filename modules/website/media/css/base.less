@@ -1,0 +1,110 @@
+.box-shadow {
+    border: 1px solid #dddddd;
+    -moz-box-shadow: 3px 3px 3px -2px #dddddd;
+    -webkit-box-shadow: 3px 3px 3px -2px #dddddd;
+    box-shadow: 3px 3px 3px -2px #dddddd;
+}
+
+.font-logo {
+    font-family: 'Ubuntu Condensed', sans-serif;
+}
+
+.border-radius (@radius) {
+    border-radius: @radius;
+    -moz-border-radius: @radius;
+    -webkit-border-radius: @radius;
+}
+
+.sprite-browser (@offset, @width, @height:16px) {
+    background: url('../img/browser_logos-16.png') no-repeat @offset 0;
+    display: inline-block;
+    margin-right: 4px;
+    width: @width;
+    height: @height;
+}
+
+#sign-in,
+#forgotten-password,
+#password-reset,
+#sign-up {
+    margin-top: 60px;
+    width: 366px;
+
+    .forgot-password {
+        margin-right: -16px;
+    }
+}
+
+#sidebar {
+    position: fixed;
+    bottom: 0px;
+    right: 40px;
+    background-color: #EEE;
+    z-index: 1050;
+    .box-shadow;
+    .border-radius(6px 6px 0px 0px);
+
+    .vertical {
+        height: 24px;
+        text-align: center;
+        padding-top: 10px;
+        padding-left: 20px;
+        padding-right: 20px;
+        padding-bottom: 2px;
+
+        a {
+            color: #F14A29;
+            font-size: 16px;
+            .font-logo;
+        }
+
+        i {
+            padding-right: 4px;
+        }
+    }
+}
+
+.clearfix() {
+    *zoom: 1;
+
+    &:before,
+    &:after {
+        display: table;
+        content: "";
+    }
+
+    &:after {
+        clear: both;
+    }
+}
+
+.popover {
+    z-index: 10000;
+}
+
+#overlay {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: #000;
+    filter:alpha(opacity=10);
+    -moz-opacity:0.1;
+    -khtml-opacity: 0.1;
+    opacity: 0.1;
+    z-index: 5000;
+}
+
+.modal {
+    h1, h2, h3, h4, h5 {
+        font-family: 'Ubuntu', sans-serif;
+    }
+
+    .modal-body {
+        .message {
+            margin-top: 15px;
+        }
+    }
+}

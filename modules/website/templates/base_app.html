@@ -1,0 +1,70 @@
+{% extends "base.html" %}
+{% load i18n compress admin_urls %}
+
+{% block css_base %}
+    {% compress css %}
+        <link href="{{ STATIC_URL }}bootstrap/css/bootstrap.css" rel="stylesheet">
+        <link href="{{ STATIC_URL }}bootstrap/css/bootstrap-responsive.css" rel="stylesheet">
+        <link href="{{ STATIC_URL }}css/libs/chosen.css" rel="stylesheet">
+        <link type="text/less" href="{{ STATIC_URL }}css/app.less" rel="stylesheet">
+        <style>
+            body {
+                padding-top: 60px;
+            }
+        </style>
+    {% endcompress %}
+{% endblock %}
+
+{% block messages %}
+    {% for message in messages %}
+        <div class="alert {% if message.tags %}alert-{{ message.tags }}{% endif %}">
+          <button class="close" data-dismiss="alert">×</button>
+          {{ message }}
+        </div>
+    {% endfor %}
+{% endblock %}
+
+{% block navigation %}
+    <div class="navbar navbar-fixed-top">
+        <div class="navbar-inner">
+            <div  class="container">
+                <a href="{% url app_events %}" class="brand">errorify</a>
+                <div class="nav-collapse">
+                    <ul class="nav">
+                        <li {% if page_name == "events" %}class="active"{% endif %}><a href="{% url app_events %}"><i class="icon-exclamation-sign icon-white"></i> {% trans "Events" %}</a></li>
+                        <li {% if page_name == "bundles" %}class="active"{% endif %}><a href="{% url app_bundles %}"><i class="icon-book icon-white"></i> {% trans "Bundles" %}</a></li>
+                        <li {% if page_name == "doc" %}class="active"{% endif %}><a href="{% url app_api_doc %}"><i class="icon-question-sign icon-white"></i> {% trans "Docs" %}</a></li>
+                        <li {% if page_name == "api" %}class="active"{% endif %}><a href="{% url app_api %}"><i class="icon-star icon-white"></i> {% trans "Api" %}</a></li>
+                    </ul>
+                    <ul class="nav pull-right">
+                        <li class="divider-vertical"></li>
+                        <li class="dropdown">
+                            <a data-toggle="dropdown" class="dropdown-toggle" href="#"><i class="icon-user icon-white"></i> {{ user.username }} <b class="caret"></b></a>
+                            <ul class="dropdown-menu">
+                                <li><a href="{% url app_auth_profile %}">{% trans "Profile" %}</a></li>
+                                <li><a class="play-tour" href="#">{% trans "Play tour" %}</a></li>
+                                {% if user.is_superuser %}
+                                    <li><a href="/backend">{% trans "Backend" %}</a></li>
+                                {% endif %}
+                                <li class="divider"></li>
+                                <li><a href="{% url app_auth_sign_out %}">{% trans "Sign out" %}</a></li>
+                            </ul>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}
+
+{% block js_base %}
+    {% compress js %}
+        <script src="{{ STATIC_URL }}js/libs/jquery.chosen.js"></script>
+        <script src="{{ STATIC_URL }}js/app.js"></script>
+    {% endcompress %}
+    
+    {% if user.is_authenticated %}
+        <script src="{{ STATIC_URL }}js/libs/bootstrap-tour.js"></script>
+        <script src="{{ STATIC_URL }}js/tour.js"></script>
+    {% endif %}
+{% endblock %}

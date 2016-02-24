@@ -1,0 +1,59 @@
+# nginx
+sudo apt-get install nginx
+
+# mysql
+sudo apt-get install mysql-server
+sudo apt-get install python-mysqldb
+
+$ mysql -uroot -p
+$ CREATE DATABASE errorify;
+$ GRANT ALL ON errorify.* TO errorify@'localhost' IDENTIFIED BY 'password';
+$ GRANT ALL ON errorify.* TO errorify@'82.192.55.148' IDENTIFIED BY 'password';
+$ FLUSH PRIVILEGES;
+
+# java
+add-apt-repository ppa:sun-java-community-team/sun-java6
+apt-get update
+apt-get install sun-java6-jdk
+update-java-alternatives -s java-6-sun
+
+# python
+sudo apt-get install python-dev
+sudo apt-get install python-setuptools
+sudo apt-get install python-pip
+sudo apt-get install libxslt-dev
+sudo apt-get install libxml2-dev
+sudo apt-get install python-imaging
+
+# django
+sudo pip install django
+sudo pip install django-jsonfield
+sudo pip install django_compressor
+sudo pip install pytz
+
+# redis
+sudo apt-get install redis-server
+
+# django-redis
+sudo pip install redis
+sudo pip install django-celery
+
+# memcache
+sudo apt-get install memcached
+sudo pip install python-memcached
+
+# thrift
+sudo pip install thrift
+sudo apt-get install libboost-dev libboost-test-dev libboost-program-options-dev libevent-dev automake libtool
+sudo apt-get install make flex bison pkg-config g++ libssl-dev
+./configure --without-php --with-python --with-java --without-ruby --without-cpp --without-erlang --without-charp
+
+# run django-celery
+python manage.py celeryd -E -B --loglevel=INFO
+python manage.py celerycam
+
+# gunicorn
+sudo pip install gunicorn
+
+# supervisor
+sudo apt-get install supervisor

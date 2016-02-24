@@ -1,0 +1,29 @@
+{% extends "base_site.html" %}
+{% load i18n %}
+
+{% block title %}errorify &rsaquo; {% trans "404: Page not found" %}{% endblock %}
+
+{% block navigation %}
+    <div class="navbar navbar-fixed-top">
+        <div class="navbar-inner">
+            <div class="container"></div>
+        </div>
+    </div>
+{% endblock %}
+
+{% block content %}
+    <div class="hero-unit" style="margin-top:200px">
+        <h2>{% trans "404: Page not found" %}</h2>
+        <p>
+            {% blocktrans %}
+                Sorry, but the page you are looking for has not been found.<br/>
+                Try checking the URL for errors, then hit the refresh button on your browser.
+            {% endblocktrans %}
+        </p>
+    </div>
+{% endblock %}
+
+{% block js_load %}{% endblock %}
+{% block js_init %}{% endblock %}
+{% block js_feedback %}{% endblock %}
+{% block sidebar %}{% endblock %}
